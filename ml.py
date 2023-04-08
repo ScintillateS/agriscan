@@ -68,3 +68,9 @@ def ConvBlock(in_channels, out_channels, pool=False):
 model = torch.load('./Model_Files/disease-classification_2.pth', map_location=torch.device('cpu'))
 model.eval()
 print(model)
+
+def diseasemodel1():
+    return 1
+
+def diseasemodel2():
+    return 1
