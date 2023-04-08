@@ -1,9 +1,11 @@
 """Main entrypoint of the application."""
-from dotenv import load_dotenv
 import os
+from dotenv import load_dotenv
 
 from flask import Flask, render_template
 from pymongo import MongoClient
+
+from text import send_twilio_message
 
 app = Flask(__name__)
 
