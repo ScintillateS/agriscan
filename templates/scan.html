@@ -55,9 +55,7 @@
       <div class="navbar-menu" id="navbarLinks">
         <div class="navbar-end">
           <a class="navbar-item" href="/scan">Soil Scan</a>
-          <a class="navbar-item" href="/map"
-            >Geographic Trends</a
-          >
+          <a class="navbar-item" href="/map">Geographic Trends</a>
         </div>
       </div>
     </nav>
@@ -89,7 +87,6 @@
                   type="text"
                   id="latitude"
                   name="latitude"
-                  readonly
                 />
               </div>
             </div>
@@ -102,14 +99,16 @@
                   type="text"
                   id="longitude"
                   name="longitude"
-                  readonly
                 />
               </div>
             </div>
-
+            <p>Note: To provide most optimum results, please allow the browser to access your current location or manually input the latitude and longitude of where the photo was taken.</p>
+            <br>
             <button class="button is-success" type="submit">Submit</button>
           </form>
+          <hr>
         </div>
+        <div class="results"></div>
       </div>
     </section>
 
@@ -174,7 +173,6 @@
 
         }
       }
-
       let phoneInput = document.getElementById("phoneno");
       phoneInput.addEventListener("input", validatePhone);
     </script>
