@@ -1,5 +1,6 @@
 """Main entrypoint of the application."""
 import os
+import json
 from dotenv import load_dotenv
 
 from flask import Flask, render_template, request
@@ -136,7 +137,11 @@ def scan():
 @app.route("/map")
 def display_map():
     """Map of plants."""
-    return render_template("map.html")
+    all_reports = {"data": list(reports.find({}, {"_id": 0}))}
+
+    print(all_reports)
+
+    return render_template("map.html", reports=all_reports)
 
 if __name__ == "__main__":
     app.run()
