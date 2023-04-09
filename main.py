@@ -9,8 +9,12 @@ from text import send_twilio_message
 import tensorflow as tf
 import torch
 import torch.nn as nn           # for creating  neural networks
+from PIL import Image
+from torchvision import transforms
+from torch.utils.data import DataLoader
 
-new_model = tf.keras.models.load_model('./Model_Files/disease-classification_1')
+
+tensormodel = tf.keras.models.load_model('./Model_Files/disease-classification_1')
 
 # Check its architecture
 
@@ -73,19 +77,37 @@ def ConvBlock(in_channels, out_channels, pool=False):
     if pool:
         layers.append(nn.MaxPool2d(4))
     return nn.Sequential(*layers)
-model = torch.load('./Model_Files/disease-classification_2.pth', map_location=torch.device('cpu'))
-model.eval()
-print(model)
+torchmodel = torch.load('./Model_Files/disease-classification_2.pth', map_location=torch.device('cpu'))
+
 
 def diseasemodel1():
     return 1
 
-def diseasemodel2():
-    return 1
+# def diseasemodel2(model, data):
+#     convert_tensor = transforms.ToTensor()
+#     model.eval()
+
+#     output = model(convert_tensor(data))
+#     prediction = torch.argmax(output)
+#     return prediction
+
+def diseasemodel2(model, img):
+    """Converts image to array and return the predicted class
+        with highest probability"""
+    # Convert to a batch of 1
+    # Get predictions from model
+    img = img.resize((256,256))
+    convert_tensor = transforms.ToTensor()
+    img = convert_tensor(img)
+    yb = model(torch.unsqueeze(img, 0))
+    # Pick index with highest probability
+    _, preds  = torch.max(yb, dim=1)
+    # Retrieve the class label
+
+    return diseaselist2[preds[0].item()]
 
 
-
-
+diseaselist2=["Apple___Apple_scab", "Apple___Black_rot", "Apple___Cedar_apple_rust", "Apple___healthy", "Blueberry___healthy", "Cherry_(including_sour)___Powdery_mildew", "Cherry_(including_sour)___healthy", "Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot", "Corn_(maize)___Common_rust_", "Corn_(maize)___Northern_Leaf_Blight", "Corn_(maize)___healthy", "Grape___Black_rot", "Grape___Esca_(Black_Measles)", "Grape___Leaf_blight_(Isariopsis_Leaf_Spot)", "Grape___healthy", "Orange___Haunglongbing_(Citrus_greening)", "Peach___Bacterial_spot", "Peach___healthy", "Pepper,_bell___Bacterial_spot", "Pepper,_bell___healthy", "Potato___Early_blight", "Potato___Late_blight", "Potato___healthy", "Raspberry___healthy", "Soybean___healthy", "Squash___Powdery_mildew", "Strawberry___Leaf_scorch", "Strawberry___healthy", "Tomato___Bacterial_spot", "Tomato___Early_blight", "Tomato___Late_blight", "Tomato___Leaf_Mold", "Tomato___Septoria_leaf_spot", "Tomato___Spider_mites Two-spotted_spider_mite", "Tomato___Target_Spot", "Tomato___Tomato_Yellow_Leaf_Curl_Virus", "Tomato___Tomato_mosaic_virus", "Tomato___healthy"]
 
 app = Flask(__name__)
 
@@ -103,7 +125,8 @@ users = db.users
 @app.route("/")
 def home():
     """Home page of the application."""
-    print(diseasemodel1(), diseasemodel2())
+    img = Image.open("test_healthy_apple.jpeg")
+    print(diseasemodel2(torchmodel, img))
     return render_template("home.html")
 
 if __name__ == "__main__":
