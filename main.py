@@ -7,7 +7,7 @@ from flask import Flask, render_template, request
 from pymongo import MongoClient
 from text import send_twilio_message
 
-import tensorflow as tf
+#import tensorflow as tf
 import torch
 import torch.nn as nn           # for creating  neural networks
 from PIL import Image
@@ -15,7 +15,7 @@ from torchvision import transforms
 from torch.utils.data import DataLoader
 
 
-tensormodel = tf.keras.models.load_model('./Model_Files/disease-classification_1')
+#tensormodel = tf.keras.models.load_model('./Model_Files/disease-classification_1')
 
 # Check its architecture
 
