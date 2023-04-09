@@ -120,7 +120,7 @@ diseaselist2 = ["Apple___Apple_scab", "Apple___Black_rot", "Apple___Cedar_apple_
                 "Pepper,_bell___Bacterial_spot", "Pepper,_bell___healthy", "Potato___Early_blight", "Potato___Late_blight", "Potato___healthy", "Raspberry___healthy", "Soybean___healthy", "Squash___Powdery_mildew", "Strawberry___Leaf_scorch", "Strawberry___healthy", "Tomato___Bacterial_spot", "Tomato___Early_blight", "Tomato___Late_blight", "Tomato___Leaf_Mold", "Tomato___Septoria_leaf_spot", "Tomato___Spider_mites Two-spotted_spider_mite", "Tomato___Target_Spot", "Tomato___Tomato_Yellow_Leaf_Curl_Virus", "Tomato___Tomato_mosaic_virus", "Tomato___healthy"]
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = '/uploads'
+app.config['UPLOAD_FOLDER'] = './uploads'
 
 
 load_dotenv()
@@ -153,7 +153,7 @@ def scan():
         longitude = request.form.get("longitude")
 
         image = request.files["image"]
-        filename = int(time.time())
+        filename = str(int(time.time())) + ".jpg"
         path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         image.save(path)
 
@@ -177,7 +177,7 @@ def scan():
         # Resize the image to 256 by 256 pixels
         img = img.resize((256, 256))
 
-        result = diseaselist2[diseasemodel2(torchmodel, img)]
+        result = diseasemodel2(torchmodel, img)
 
         report = {
             "phoneno": phoneno,
