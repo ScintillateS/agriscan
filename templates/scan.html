@@ -13,7 +13,11 @@
       href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap"
       rel="stylesheet"
     />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+
+    <script
+      src="https://kit.fontawesome.com/4a18b9ade2.js"
+      crossorigin="anonymous"
+    ></script>
 
     <style>
       body {
@@ -29,11 +33,7 @@
       aria-label="main navigation"
     >
       <div class="navbar-brand">
-        <a
-          class="navbar-item"
-          style="padding: 30px"
-          href="/"
-        >
+        <a class="navbar-item" style="padding: 30px" href="/">
           <img
             width="150px"
             src="../static/images/agri-logo.png"
@@ -63,7 +63,7 @@
     <section class="section hero is-fullheight" id="1">
       <div class="hero-body">
         <div class="container">
-          <form action="/scan" method="POST">
+          <form action="/scan" method="POST" enctype="multipart/form-data">
             <div class="field">
               <label class="label">Phone Number</label>
               <div class="control">
@@ -75,8 +75,9 @@
                   placeholder="+1 1234567890"
                 />
               </div>
-              <p class="help" id="undertext">Please input your phone number in the format +1 1234567890</p>
-
+              <p class="help" id="undertext">
+                Please input your phone number in the format +1 1234567890
+              </p>
             </div>
 
             <div class="field">
@@ -102,11 +103,34 @@
                 />
               </div>
             </div>
-            <p>Note: Please allow the browser to access your current location or manually input the latitude and longitude of where the photo was taken.</p>
-            <br>
+
+            <label class="label">Image</label>
+            <div class="file is-small has-name" id="fileupload">
+                <label class="file-label">
+                  <input class="file-input" type="file" name="image">
+                  <span class="file-cta">
+                    <span class="file-icon">
+                      <i class="fas fa-upload"></i>
+                    </span>
+                    <span class="file-label">
+                      Upload an image
+                    </span>
+                  </span>
+                  <span class="file-name">
+                    File name
+                  </span>
+                </label>
+              </div>
+
+            <p>
+              Note: Please allow the browser to access your current location or
+              manually input the latitude and longitude of where the photo was
+              taken.
+            </p>
+            <br />
             <button class="button is-success" type="submit">Submit</button>
           </form>
-          <hr>
+          <hr />
         </div>
         <div class="results"></div>
       </div>
@@ -163,18 +187,26 @@
         underText.classList.remove("is-success");
 
         if (!phoneRegex.test(phoneValue)) {
-            phoneInput.classList.add("is-danger");
-            underText.classList.add("is-danger");
-            underText.innerHTML = "Please input your phone number in the format +1 1234567890";
+          phoneInput.classList.add("is-danger");
+          underText.classList.add("is-danger");
+          underText.innerHTML =
+            "Please input your phone number in the format +1 1234567890";
         } else {
-            phoneInput.classList.add("is-success");
-            underText.classList.add("is-success");
-            underText.innerHTML = "Thank you!";
-
+          phoneInput.classList.add("is-success");
+          underText.classList.add("is-success");
+          underText.innerHTML = "Thank you!";
         }
       }
       let phoneInput = document.getElementById("phoneno");
       phoneInput.addEventListener("input", validatePhone);
+
+      const fileInput = document.querySelector("#fileupload input[type=file]");
+      fileInput.onchange = () => {
+        if (fileInput.files.length > 0) {
+          const fileName = document.querySelector("#fileupload .file-name");
+          fileName.textContent = fileInput.files[0].name;
+        }
+      };
     </script>
   </body>
 </html>
