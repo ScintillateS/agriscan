@@ -7,7 +7,6 @@ from flask import Flask, render_template, request
 from pymongo import MongoClient
 from text import send_twilio_message
 
-import tensorflow as tf
 from PIL import Image
 import torch
 import torch.nn as nn           # for creating  neural networks

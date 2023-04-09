@@ -73,6 +73,15 @@
   <script>
     let reports = {{ reports|tojson }};
     reports = reports.data
+    print(reports)
+
+    // reports = [
+    // {'phoneno': '+1 9254995384', 'latitude': '0', 'longitude': '69', 'disease': 'Apple___Black_rot'}, 
+    // {'phoneno': '+1 1309280313', 'latitude': '63', 'longitude': '14', 'disease': 'Apple___Black_rot'}, 
+    // {'phoneno': '+1 3182092934', 'latitude': '62', 'longitude': '14', 'disease': 'Apple___Black_rot'}, 
+    // {'phoneno': '+1 4830928093', 'latitude': '61', 'longitude': '13', 'disease': 'Apple___Black_rot'},
+    // {'phoneno': '+1 3192380129', 'latitude': '67', 'longitude': '15', 'disease': 'Apple___Black_rot'}
+    // ]
 
     var mapOptions = {
       center: [0, 0],
@@ -83,7 +92,7 @@
 
     // Creating a Layer object
     var layer = new L.TileLayer(
-      "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?lang=en"
     );
     map.addLayer(layer); // Adding layer to the map
 
@@ -103,13 +112,29 @@
       let disease = report.disease;
 
       let marker = L.marker([lat, long]).addTo(map);
-      marker.bindPopup(`<b>Diease: </b>${disease}`)
+      marker.bindPopup(`<b>Disease: </b>${disease}`)
+
+      for (let j = i; j < reports.length; j++) {
+        if (Math.abs(lat-reports[j].latitude) <= 1 && Math.abs(long-reports[j].longitude) <= 1) {
+          let center_lat = (parseInt(lat) + parseInt(reports[j].latitude))/2 ;
+          let center_long = (parseInt(long) + parseInt(reports[j].longitude))/2 ;
+          // console.log(center_long)
+          let change_lat = (parseInt(lat) - parseInt(reports[j].latitude)) * 111045;
+          let change_long = (parseInt(long) - parseInt(reports[j].longitude)) * 111045;
+          let radius = Math.sqrt(change_lat**2 + change_long**2);
+          var circ = L.circle([center_lat, center_long], radius);
+          circ.addTo(map);
+          circ.setStyle({color: 'red'});
+        }
+      }
     }
 
-    L.tileLayer(urlTemplate, {
-      maxNativeZoom: 8,
-      maxZoom: 8,
-    }).addTo(map);
+    // L.tileLayer(urlTemplate, {
+    //   maxNativeZoom: 8,
+    //   maxZoom: 8,
+    // }).addTo(map);
+
+    // {'data': [{'phoneno': '+1 9254995384', 'latitude': '0', 'longitude': '69', 'disease': 'Apple___Black_rot'}]}
 
   </script>
 </html>
