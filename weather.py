@@ -19,18 +19,26 @@ arrowendpointx = longitude + (latestxwind*50)
 arrowendpointy =  latitude + (latestywind*50)
 windslope = (arrowendpointy-latitude)/(arrowendpointx-longitude)
 thicknessslope = (-1)/(windslope)
-r = math.sqrt(1+((thicknessslope)**2))
-cornerrectx = longitude + (3/r)
-cornerrecty = latitude + (3/r)
-secondcornerrectx = longitude + (-3/r)
-secondcornerrecty = latitude + (-3/r)
+
+cornerrectx = longitude + (3/math.sqrt(1+(thicknessslope**2)))
+cornerrecty = latitude + ((3*thicknessslope)/math.sqrt(1+(thicknessslope**2)))
+secondcornerrectx = longitude - (3/math.sqrt(1+(thicknessslope**2)))
+secondcornerrecty = latitude - ((3*thicknessslope)/math.sqrt(1+(thicknessslope**2)))
+
 finalcornerx = secondcornerrectx + (latestxwind*50)
 finalcornery = secondcornerrecty + (latestywind*50)
 
+
 print(arrowendpointx, arrowendpointy)
 
-print(latitude, longitude)
+print(longitude, latitude)
 
 print(cornerrectx, cornerrecty)
 
-print(finalcornerx, finalcornery)
+print(secondcornerrectx, secondcornerrecty)
+
+print (finalcornerx, finalcornery)
+
+print(windslope, thicknessslope)
+
+#FOR RECTANGLE USE cornerrectx, cornerrecty AND finalcornerx, finalcornery
