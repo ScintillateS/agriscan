@@ -109,11 +109,16 @@
       let report = reports[i];
       let lat = report.latitude;
       let long = report.longitude;
-      let disease = report.disease;
 
-      let marker = L.marker([lat, long]).addTo(map);
-      marker.bindPopup(`<b>Disease: </b>${disease}`)
+      let plant = report.plant;
+      let condition = report.condition;
+      let healthy = report.healthy;
 
+      if (!healthy) {
+        let marker = L.marker([lat, long]).addTo(map);
+        marker.bindPopup(`<b>Plant: </b>${plant}<br><b>Disease: </b>${condition}`)      
+      }
+      
       for (let j = i; j < reports.length; j++) {
         if (Math.abs(lat-reports[j].latitude) <= 1 && Math.abs(long-reports[j].longitude) <= 1) {
           let center_lat = (parseInt(lat) + parseInt(reports[j].latitude))/2 ;

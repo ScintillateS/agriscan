@@ -115,8 +115,8 @@ def diseasemodel2(model, img):
     return diseaselist2[preds[0].item()]
 
 
-diseaselist2 = ["Apple___Apple_scab", "Apple___Black_rot", "Apple___Cedar_apple_rust", "Apple___healthy", "Blueberry___healthy", "Cherry_(including_sour)___Powdery_mildew", "Cherry_(including_sour)___healthy", "Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot", "Corn_(maize)___Common_rust_", "Corn_(maize)___Northern_Leaf_Blight", "Corn_(maize)___healthy", "Grape___Black_rot", "Grape___Esca_(Black_Measles)", "Grape___Leaf_blight_(Isariopsis_Leaf_Spot)", "Grape___healthy", "Orange___Haunglongbing_(Citrus_greening)", "Peach___Bacterial_spot", "Peach___healthy",
-                "Pepper,_bell___Bacterial_spot", "Pepper,_bell___healthy", "Potato___Early_blight", "Potato___Late_blight", "Potato___healthy", "Raspberry___healthy", "Soybean___healthy", "Squash___Powdery_mildew", "Strawberry___Leaf_scorch", "Strawberry___healthy", "Tomato___Bacterial_spot", "Tomato___Early_blight", "Tomato___Late_blight", "Tomato___Leaf_Mold", "Tomato___Septoria_leaf_spot", "Tomato___Spider_mites Two-spotted_spider_mite", "Tomato___Target_Spot", "Tomato___Tomato_Yellow_Leaf_Curl_Virus", "Tomato___Tomato_mosaic_virus", "Tomato___healthy"]
+diseaselist2 = [("Apple", "Apple scab", False), ("Apple", "Black rot", False), ("Apple", "Cedar apple rust", False), ("Apple", "Healthy", True), ("Blueberry", "Healthy", True), ("Cherry", "Powdery mildew", False), ("Cherry", "Healthy", True), ("Corn", "Cercospora leaf spot", False), ("Corn", "Common rust", False), ("Corn", "Northern Leaf Blight", False), ("Corn", "Healthy", True), ("Grape", "Black rot", False), ("Grape", "Esca (Black Measles)", False), ("Grape", "Leaf blight (Isariopsis Leaf Spot)", False), ("Grape", "Healthy", True), ("Orange", "Haunglongbing (Citrus greening)", False), ("Peach", "Bacterial spot", False), ("Peach", "Healthy", True), ("Pepper", "Bacterial spot",
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    False), ("Pepper", "Healthy", True), ("Potato", "Early blight", False), ("Potato", "Late blight", False), ("Potato", "Healthy", True), ("Raspberry", "Healthy", True), ("Soybean", "Healthy", True), ("Squash", "Powdery mildew", False), ("Strawberry", "Leaf scorch", False), ("Strawberry", "Healthy", True), ("Tomato", "Bacterial spot", False), ("Tomato", "Early blight", False), ("Tomato", "Late blight", False), ("Tomato", "Leaf Mold", False), ("Tomato", "Septoria leaf spot", False), ("Tomato", "Spider mites", False), ("Tomato", "Target Spot", False), ("Tomato", "Tomato Yellow Leaf Curl Virus", False), ("Tomato", "Tomato mosaic virus", False), ("Tomato", "Healthy", True)]
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = './uploads'
@@ -182,13 +182,17 @@ def scan():
             "phoneno": phoneno,
             "latitude": latitude,
             "longitude": longitude,
-            "disease": result
+            "plant": result[0],
+            "condition": result[1],
+            "healthy": result[2]
         }
 
         reports.insert_one(report)
 
         send_twilio_message(
-            f"Your plant has been scanned! Thank you for your input. Your image was identified with: {result}", phoneno.replace(" ", ""))
+            f"Your plant has been scanned! Thank you for your input.\n Your {result[0]} was identified with: {result[1]}. It is {'healthy' if result[2] else 'unhealthy'}.", phoneno.replace(" ", ""))
+
+        os.remove(path)
 
         return render_template("scan.html")
 
