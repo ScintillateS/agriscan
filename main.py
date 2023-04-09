@@ -202,8 +202,6 @@ def display_map():
     """Map of plants."""
     all_reports = {"data": list(reports.find({}, {"_id": 0}))}
 
-    print(all_reports)
-
     return render_template("map.html", reports=all_reports)
 
 
