@@ -191,7 +191,7 @@ def scan():
         reports.insert_one(report)
 
         send_twilio_message(
-            f"Your plant has been scanned! Thank you for your input. Your {result[0]} was identified with: {result[1]}. It is {'healthy :)' if result[2] else 'unhealthy :('}", phoneno.replace(" ", ""))
+            f"Your plant has been scanned! Thank you for your input.\n Your {result[0]} was identified with: {result[1]}. It is {'healthy' if result[2] else 'unhealthy'}.", phoneno.replace(" ", ""))
 
         os.remove(path)
 
