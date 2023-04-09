@@ -1,9 +1,11 @@
 import requests
 import json
-
+import math
 url = 'https://api.windy.com/api/point-forecast/v2'
-myobj = {"lat": 49.809,
-    "lon": 16.787,
+latitude = 49.809
+longitude = 16.787
+myobj = {"lat": latitude,
+    "lon": longitude,
     "model": "gfs",
     "parameters": ["wind"],
     "levels": ["surface"],
@@ -12,4 +14,23 @@ x = requests.post(url, json = myobj)
 y = json.loads(x.text)
 latestxwind = y['wind_u-surface'][-1] #latest wind data point from the x direction (west to east)
 latestywind = y['wind_v-surface'][-1] #latest wind data point from the y direction (south to north)
-print(latestxwind, latestywind)
+
+arrowendpointx = longitude + (latestxwind*50)
+arrowendpointy =  latitude + (latestywind*50)
+windslope = (arrowendpointy-latitude)/(arrowendpointx-longitude)
+thicknessslope = (-1)/(windslope)
+r = math.sqrt(1+((thicknessslope)**2))
+cornerrectx = longitude + (3/r)
+cornerrecty = latitude + (3/r)
+secondcornerrectx = longitude + (-3/r)
+secondcornerrecty = latitude + (-3/r)
+finalcornerx = secondcornerrectx + (latestxwind*50)
+finalcornery = secondcornerrecty + (latestywind*50)
+
+print(arrowendpointx, arrowendpointy)
+
+print(latitude, longitude)
+
+print(cornerrectx, cornerrecty)
+
+print(finalcornerx, finalcornery)
