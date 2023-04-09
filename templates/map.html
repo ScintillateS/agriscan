@@ -100,10 +100,10 @@
       let report = reports[i];
       let lat = report.latitude;
       let long = report.longitude;
-      let phoneno = report.phoneno;
+      let disease = report.disease;
 
       let marker = L.marker([lat, long]).addTo(map);
-      marker.bindPopup(`<b>Phone Number: </b>${phoneno}`)
+      marker.bindPopup(`<b>Diease: </b>${disease}`)
     }
 
     L.tileLayer(urlTemplate, {
